@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gopi Salon</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Google Fonts - Inter (for general text) -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!-- Google Fonts - Great Vibes (for 'Gopi' script) -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<!-- Google Fonts - Oswald (for 'SALON' bold display) -->
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+body {
+font-family: 'Inter', sans-serif;
+background-color: #f8fafc; /* Light blue-gray background, will be overridden by Tailwind */
+}
+.hero-section {
+/* Using a placeholder image. For a real site, replace with a high-quality salon image. */
+background-image: url('https://placehold.co/1920x800/6366f1/ffffff'); /* Muted indigo placeholder, no text */
+background-size: cover;
+background-position: center;
+position: relative;
+overflow: hidden; /* Hide content that moves out of view */
+}
+/* Custom scrollbar for better aesthetics */
+::-webkit-scrollbar {
+width: 8px;
+}
+::-webkit-scrollbar-track {
+background: #f1f1f1;
+border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+background: #a78bfa; /* Matches a lighter purple/indigo accent */
+border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #8b5cf6; /* Darker purple/indigo on hover */
+}
+
+/* Styles for the tab buttons */
+.tab-button {
+padding: 0.75rem 1.5rem;
+border-radius: 0.5rem;
+font-weight: 600;
+transition: all 0.3s ease-in-out;
+cursor: pointer;
+border: 1px solid transparent;
+white-space: nowrap; /* Prevent text wrapping */
+}
+.tab-button.active {
+background-color: #6366f1; /* indigo-500 */
+color: white;
+border-color: #6366f1;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.tab-button:not(.active):hover {
+background-color: #e0e7ff; /* indigo-100 */
+color: #4338ca; /* indigo-700 */
+}
+
+/* Styles for individual service cards within tabs */
+.service-item-card {
+background-color: #ffffff;
+border: 1px solid #e2e8f0; /* gray-200 */
+border-radius: 0.75rem; /* rounded-xl */
+box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+transition: all 0.3s ease-in-out;
+display: flex;
+flex-direction: column;
+overflow: hidden; /* Ensures image corners are rounded */
+}
+.service-item-card:hover {
+box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* stronger shadow */
+transform: translateY(-5px); /* slight lift */
+border-color: #a5b4fc; /* indigo-200 */
+}
+.service-item-card img {
+width: 100%;
+height: 160px; /* Slightly reduced height for more compactness */
+object-fit: cover; /* Cover the area, crop if necessary */
+border-top-left-radius: 0.75rem;
+border-top-right-radius: 0.75rem;
+}
+.service-item-card-content {
+padding: 1.25rem; /* Slightly reduced padding */
+flex-grow: 1; /* Allows content to expand and push button to bottom */
+display: flex;
+flex-direction: column;
+}
+.service-item-card-content h4 {
+font-size: 1.35rem; /* Slightly smaller font size for titles */
+font-weight: 700; /* font-bold */
+color: #1f2937; /* gray-900 */
+margin-bottom: 0.6rem;
+}
+.service-item-card-content p {
+font-size: 0.9rem; /* Slightly smaller for descriptions */
+color: #4b5563; /* gray-700 */
+line-height: 1.5;
+margin-bottom: 0.6rem;
+}
+.service-item-card-content .price-info {
+font-size: 0.85rem;
+color: #374151; /* gray-800 */
+margin-bottom: 0.4rem;
+}
+.service-item-card-content .styles-info {
+font-size: 0.8rem;
+color: #6b7280; /* gray-500 */
+margin-bottom: 0.8rem;
+}
+.service-item-card-content .view-prices-btn {
+background-color: #6366f1; /* indigo-500 */
+color: white;
+padding: 0.6rem 1rem; /* Slightly reduced padding */
+border-radius: 0.5rem;
+font-weight: 600;
+text-align: center;
+transition: background-color 0.3s ease-in-out;
+margin-top: auto; /* Pushes button to the bottom */
+font-size: 0.9rem; /* Slightly smaller font for button */
+}
+.service-item-card-content .view-prices-btn:hover {
+background-color: #4f46e5; /* indigo-600 */
+}
+
+/* New styles for scroll-in animation */
+.fade-in-section {
+opacity: 0;
+transform: translateY(20px);
+transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-section.is-visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+/* Custom fonts for Gopi Salon name */
+.font-gopi-script {
+font-family: 'Great Vibes', cursive;
+}
+.font-salon-display {
+font-family: 'Oswald', sans-serif;
+letter-spacing: 0.05em; /* Slightly wider letter spacing for impact */
+}
+</style>
+</head>
+<body class="text-gray-800">
+
+<!-- Header -->
+<header class="bg-white shadow-md py-4 px-6 fixed w-full z-10 top-0">
+<nav class="container mx-auto flex justify-between items-center">
+<!-- Salon Name/Logo -->
+<a href="#" class="flex items-baseline rounded-md p-2">
+<span class="text-5xl font-gopi-script text-indigo-800">Gopi</span>
+<span class="text-3xl font-salon-display text-indigo-800 ml-2">SALON</span>
+</a>
+<!-- Desktop Navigation -->
+<ul class="hidden md:flex space-x-6">
+<li><a href="#home" class="text-gray-700 hover:text-indigo-600 font-medium transition duration-300 ease-in-out rounded-md p-2">Home</a></li>
+<li><a href="#services" class="text-gray-700 hover:text-indigo-600 font-medium transition duration-300 ease-in-out rounded-md p-2">Services</a></li>
+<li><a href="#about" class="text-gray-700 hover:text-indigo-600 font-medium transition duration-300 ease-in-out rounded-md p-2">About Us</a></li>
+<li><a href="#contact" class="text-gray-700 hover:text-indigo-600 font-medium transition duration-300 ease-in-out rounded-md p-2">Contact</a></li>
+</ul>
+<!-- Mobile Menu Button -->
+<button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+</svg>
+</button>
+</nav>
+<!-- Mobile Menu Overlay -->
+<div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-white bg-opacity-95 z-20 flex flex-col items-center justify-center space-y-6">
+<button id="close-mobile-menu" class="absolute top-4 right-6 text-gray-700 focus:outline-none">
+<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+</svg>
+</button>
+<a href="#home" class="text-gray-800 text-2xl hover:text-indigo-600 font-medium transition duration-300 ease-in-out rounded-md p-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Home</a>
+<a href="#services" class="text-gray-800 text-2xl hover:text-indigo-600 font-medium transition duration-300 ease-in-out rounded-md p-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Services</a>
+<a href="#about" class="text-gray-800 text-2xl hover:text-indigo-600 font-medium transition duration-300 ease-in-out rounded-md p-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">About Us</a>
+<a href="#contact" class="text-gray-800 text-2xl hover:text-indigo-600 font-medium transition duration-300 ease-in-out rounded-md p-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Contact</a>
+</div>
+</header>
+
+<main class="pt-16">
+<!-- Hero Section -->
+<section id="home" class="bg-indigo-600 text-white text-center py-20 md:py-32 relative flex items-center justify-center min-h-[60vh]">
+<div id="hero-content" class="relative z-10 max-w-4xl mx-auto px-4 fade-in-section">
+<h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+<span class="text-white">Welcome to </span>
+<span class="font-gopi-script text-white">Gopi</span>
+<span class="font-salon-display text-white ml-2">SALON</span>
+</h1>
+<p class="text-xl md:text-2xl mb-8 font-light drop-shadow-md">Experience the best in hair care and beauty services.</p>
+<a href="#services" class="bg-white hover:bg-gray-100 text-indigo-800 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">Explore Services</a>
+</div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="py-16 bg-gray-50">
+<div class="container mx-auto px-6">
+<div class="fade-in-section">
+<h2 class="text-4xl font-bold text-center text-indigo-800 mb-12">Our Services</h2>
+
+<!-- Service Category Tabs -->
+<div class="flex flex-wrap justify-center gap-4 mb-8 overflow-x-auto pb-4">
+<button class="tab-button active" data-tab="haircuts">Haircuts & Styling</button>
+<button class="tab-button" data-tab="coloring">Coloring & Highlights</button>
+<button class="tab-button" data-tab="facials">Facials & Skincare</button>
+<button class="tab-button" data-tab="bridal">Bridal Packages</button>
+</div>
+
+<!-- Tab Content -->
+<!-- The grid for service items is applied directly to each tab-pane -->
+<div id="haircuts" class="tab-pane active-tab grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Classic+Cut" alt="Gentlemen's Classic Cut">
+<div class="service-item-card-content">
+<h4>Gentlemen's Classic Cut</h4>
+<p>A timeless, sharp haircut tailored to your face shape, perfect for a professional and polished look.</p>
+<p class="price-info"><strong>Price:</strong> ₹300 - ₹1,500</p>
+<p class="styles-info"><strong>Popular:</strong> Side Part, Crew Cut, Undercut</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Modern+Fade" alt="Modern Fade & Taper">
+<div class="service-item-card-content">
+<h4>Modern Fade & Taper</h4>
+<p>A contemporary cut featuring a gradual transition from short to long hair, offering a clean and stylish finish.</p>
+<p class="price-info"><strong>Price:</strong> ₹400 - ₹2,000</p>
+<p class="styles-info"><strong>Popular:</strong> Skin Fade, Mid Fade, Low Fade, Taper Fade</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Scissor+Cut" alt="Scissor Cut & Layering">
+<div class="service-item-card-content">
+<h4>Scissor Cut & Layering</h4>
+<p>Precision scissor work to create natural flow and volume, ideal for longer or medium-length hair.</p>
+<p class="price-info"><strong>Price:</strong> ₹500 - ₹2,500</p>
+<p class="styles-info"><strong>Popular:</strong> Flow Haircut, Textured Layers, Long Fringe</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Beard+Shape" alt="Beard Trim & Shape">
+<div class="service-item-card-content">
+<h4>Beard Trim & Shape</h4>
+<p>Expert shaping and trimming of your beard to complement your facial features and haircut. Includes hot towel and balm application.</p>
+<p class="price-info"><strong>Price:</strong> ₹200 - ₹1,000</p>
+<p class="styles-info"><strong>Popular:</strong> Full Beard Trim, Goatee, Stubble Trim, Beard Line-up</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Hair+Wash" alt="Hair Wash & Blow Dry">
+<div class="service-item-card-content">
+<h4>Hair Wash & Blow Dry</h4>
+<p>A refreshing hair wash with premium products, followed by a professional blow-dry for added volume and style.</p>
+<p class="price-info"><strong>Price:</strong> ₹150 - ₹700</p>
+<p class="styles-info"><strong>Popular:</strong> Volumizing Blow Dry, Straightening Blow Dry, Casual Styling</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+</div>
+
+<div id="coloring" class="tab-pane hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Global+Color" alt="Global Hair Color">
+<div class="service-item-card-content">
+<h4>Global Hair Color for Men</h4>
+<p>Full hair coloring to achieve a uniform new shade or cover greys, using high-quality, long-lasting dyes.</p>
+<p class="price-info"><strong>Price:</strong> ₹1,500 - ₹6,000+</p>
+<p class="styles-info"><strong>Popular:</strong> Natural Black, Dark Brown, Burgundy, Ash Brown</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Highlights" alt="Subtle Highlights/Lowlights">
+<div class="service-item-card-content">
+<h4>Subtle Highlights/Lowlights</h4>
+<p>Adds depth and dimension to your hair with subtle streaks of lighter or darker shades, enhancing your natural look.</p>
+<p class="price-info"><strong>Price:</strong> ₹2,000 - ₹8,000+</p>
+<p class="styles-info"><strong>Popular:</strong> Sun-kissed Highlights, Balayage for Men, Muted Tones</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Grey+Blending" alt="Grey Blending">
+<div class="service-item-card-content">
+<h4>Grey Blending</h4>
+<p>A specialized service to subtly reduce the appearance of grey hair, providing a natural, salt-and-pepper look without full coverage.</p>
+<p class="price-info"><strong>Price:</strong> ₹1,000 - ₹5,000</p>
+<p class="styles-info"><strong>Popular:</strong> Natural Grey Coverage, Soft Blending</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Creative+Color" alt="Creative Color">
+<div class="service-item-card-content">
+<h4>Creative Color (Streaks/Fashion Shades)</h4>
+<p>Bold and vibrant color applications for specific sections or an all-over fashion statement.</p>
+<p class="price-info"><strong>Price:</strong> ₹2,500 - ₹10,000+</p>
+<p class="styles-info"><strong>Popular:</strong> Blue Streaks, Silver/Platinum, Ombre, Dip-dye</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+</div>
+
+<div id="facials" class="tab-pane hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Deep+Cleansing+Facial" alt="Deep Cleansing Facial">
+<div class="service-item-card-content">
+<h4>Deep Cleansing Facial for Men</h4>
+<p>A purifying facial designed to remove impurities, excess oil, and dead skin cells, leaving skin fresh and clean.</p>
+<p class="price-info"><strong>Price:</strong> ₹800 - ₹3,500</p>
+<p class="styles-info"><strong>Popular:</strong> Charcoal Detox Facial, Purity Facial</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Anti-Pollution+Facial" alt="Anti-Pollution Facial">
+<div class="service-item-card-content">
+<h4>Anti-Pollution Facial</h4>
+<p>Protects and repairs skin from environmental damage, ideal for urban dwellers. Includes antioxidant-rich products.</p>
+<p class="price-info"><strong>Price:</strong> ₹1,200 - ₹4,500</p>
+<p class="styles-info"><strong>Popular:</strong> Urban Shield Facial, Oxygenating Facial</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=De-Tan+Facial" alt="De-Tan Facial">
+<div class="service-item-card-content">
+<h4>De-Tan Facial</h4>
+<p>Specifically formulated to reduce sun tan and even out skin tone, restoring your natural complexion.</p>
+<p class="price-info"><strong>Price:</strong> ₹1,000 - ₹4,000</p>
+<p class="styles-info"><strong>Popular:</strong> Brightening De-Tan, Pigmentation Control Facial</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Hydrating+Facial" alt="Hydrating & Brightening Facial">
+<div class="service-item-card-content">
+<h4>Hydrating & Brightening Facial</h4>
+<p>Infuses the skin with essential moisture and nutrients, improving texture and giving a radiant glow.</p>
+<p class="price-info"><strong>Price:</strong> ₹1,100 - ₹4,200</p>
+<p class="styles-info"><strong>Popular:</strong> Vitamin C Boost Facial, Aqua Hydration Facial</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Acne+Facial" alt="Acne Control Facial">
+<div class="service-item-card-content">
+<h4>Acne Control Facial</h4>
+<p>Targets breakouts and reduces inflammation, helping to clear and prevent acne for clearer skin.</p>
+<p class="price-info"><strong>Price:</strong> ₹1,300 - ₹5,000</p>
+<p class="styles-info"><strong>Popular:</strong> Purifying Acne Facial, Salicylic Acid Treatment</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Under-Eye+Treatment" alt="Under-Eye Treatment">
+<div class="service-item-card-content">
+<h4>Under-Eye Treatment</h4>
+<p>A focused treatment to reduce dark circles, puffiness, and fine lines around the delicate eye area.</p>
+<p class="price-info"><strong>Price:</strong> ₹400 - ₹1,800</p>
+<p class="styles-info"><strong>Popular:</strong> Collagen Eye Mask, Dark Circle Reduction Therapy</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+</div>
+
+<div id="bridal" class="tab-pane hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Pre-Wedding+Grooming" alt="Pre-Wedding Grooming Essentials">
+<div class="service-item-card-content">
+<h4>Pre-Wedding Grooming Essentials</h4>
+<p>A foundational package including a classic haircut, beard trim, deep cleansing facial, and basic manicure/pedicure to get the groom wedding-ready.</p>
+<p class="price-info"><strong>Price:</strong> ₹3,000 - ₹12,000</p>
+<p class="styles-info"><strong>Popular:</strong> Express Groom Prep, Last-Minute Touch-up</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Royal+Groom" alt="The Royal Groom Package">
+<div class="service-item-card-content">
+<h4>The Royal Groom Package</h4>
+<p>A luxurious and comprehensive package featuring a signature haircut & styling, global hair color or grey blending, premium facial, deluxe manicure & pedicure, body polishing, and a relaxing head massage.</p>
+<p class="price-info"><strong>Price:</strong> ₹7,000 - ₹35,000+</p>
+<p class="styles-info"><strong>Popular:</strong> Maharaja Grooming, Platinum Groom Package</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Destination+Wedding" alt="Destination Wedding Prep">
+<div class="service-item-card-content">
+<h4>Destination Wedding Prep</h4>
+<p>Tailored grooming services for grooms heading to destination weddings, often including multiple sessions for hair, skin, and body treatments leading up to the event.</p>
+<p class="price-info"><strong>Price:</strong> ₹10,000 - ₹50,000+</p>
+<p class="styles-info"><strong>Popular:</strong> Multi-Session Grooming, Travel-Ready Package</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+<div class="service-item-card">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=Groomsmen" alt="Express Grooming for Groomsmen">
+<div class="service-item-card-content">
+<h4>Express Grooming for Groomsmen</h4>
+<p>Quick and efficient grooming services for the groom's party, including basic haircuts, beard trims, and quick refreshes.</p>
+<p class="price-info"><strong>Price:</strong> ₹800 - ₹3,000 per person</p>
+<p class="styles-info"><strong>Popular:</strong> Group Grooming Session, Quick Style & Refresh</p>
+<a href="#contact" class="view-prices-btn">Book Now</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- About Us Section -->
+<section id="about" class="py-16 bg-indigo-50">
+<div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
+<div class="md:w-1/2 fade-in-section">
+<img src="https://placehold.co/600x400/818cf8/ffffff?text=About+Gopi+Salon" alt="About Gopi Salon" class="rounded-xl shadow-lg w-full h-auto object-cover border-4 border-white">
+</div>
+<div class="md:w-1/2 text-center md:text-left fade-in-section">
+<h2 class="text-4xl font-bold text-indigo-800 mb-6">About Gopi Salon</h2>
+<p class="text-gray-700 text-lg leading-relaxed mb-4">
+At Gopi Salon, beauty meets expertise. We are dedicated to providing exceptional hair and beauty services in a relaxing and friendly environment. Our team of highly skilled professionals is passionate about helping you look and feel your absolute best.
+</p>
+<p class="text-gray-700 text-lg leading-relaxed">
+With years of experience and a commitment to staying updated with the latest trends and techniques, Gopi Salon ensures a personalized experience for every client. Your satisfaction is our top priority!
+</p>
+</div>
+</div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-16 bg-indigo-800 text-white text-center">
+<div class="container mx-auto px-6 fade-in-section">
+<h2 class="text-4xl font-bold mb-6">Ready to Transform Your Look?</h2>
+<p class="text-xl mb-8">Book an appointment with Gopi Salon today and let us bring out your natural beauty.</p>
+<a href="#contact" class="bg-white hover:bg-gray-100 text-indigo-800 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">Book Now</a>
+</div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-16 bg-gray-50">
+<div class="container mx-auto px-6">
+<h2 class="text-4xl font-bold text-center text-indigo-800 mb-12 fade-in-section">Contact Us</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+<!-- Contact Form -->
+<div class="bg-white p-8 rounded-xl shadow-lg border border-indigo-100 fade-in-section">
+<h3 class="text-2xl font-semibold text-gray-900 mb-6">Send us a message</h3>
+<form class="space-y-6">
+<div>
+<label for="name" class="block text-gray-700 text-sm font-medium mb-2">Name</label>
+<input type="text" id="name" name="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200" placeholder="Your Name" required>
+</div>
+<div>
+<label for="email" class="block text-gray-700 text-sm font-medium mb-2">Email</label>
+<input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200" placeholder="Your Email" required>
+</div>
+<div>
+<label for="message" class="block text-gray-700 text-sm font-medium mb-2">Message</label>
+<textarea id="message" name="message" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200" placeholder="Your Message" required></textarea>
+</div>
+<button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">Send Message</button>
+</form>
+</div>
+
+<!-- Contact Information -->
+<div class="bg-white p-8 rounded-xl shadow-lg border border-indigo-100 fade-in-section">
+<h3 class="text-2xl font-semibold text-gray-900 mb-6">Find Us</h3>
+<div class="space-y-4">
+<p class="flex items-center text-gray-700 text-lg">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-indigo-600 mr-3">
+<path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+</svg>
+123 Beauty Street, Salon City, ST 12345
+</p>
+<p class="flex items-center text-gray-700 text-lg">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-indigo-600 mr-3">
+<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.106l-1.412-.353a1.125 1.125 0 0 1-.924-.924L19.5 7.125c0-.891-.659-1.608-1.551-1.735l-1.05-.159a1.125 1.125 0 0 1-.876-.436m-4.428 8.424a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5ZM12 12.75h.008v.008H12v-.008Z" />
+</svg>
+(123) 456-7890
+</p>
+<p class="flex items-center text-gray-700 text-lg">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-indigo-600 mr-3">
+<path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25H4.5a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5H4.5a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.972l-7.5 4.286a2.25 2.25 0 0 1-2.184 0L2.25 9.243A2.25 2.25 0 0 1 1.185 7H2.25m19.5 0-1.5 1.5" />
+</svg>
+info@gopisalon.com
+</p>
+</div>
+<div class="mt-8">
+<h3 class="text-2xl font-semibold text-gray-900 mb-4">Our Hours</h3>
+<ul class="text-gray-700 text-lg space-y-2">
+<li>Monday - Friday: 9:00 AM - 7:00 PM</li>
+<li>Saturday: 10:00 AM - 6:00 PM</li>
+<li>Sunday: Closed</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-indigo-900 text-white py-8">
+<div class="container mx-auto px-6 text-center">
+<p>&copy; 2025 Gopi Salon. All rights reserved.</p>
+<div class="flex justify-center space-x-6 mt-4">
+<a href="#" class="text-gray-400 hover:text-white transition duration-300 ease-in-out">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm3.5 6h-2.5v2.5h2.5V8zm-3.5 0H8v2.5h2.5V8zm-2.5 3.5H8v2.5h2.5v-2.5zm3.5 0h-2.5v2.5h2.5v-2.5z"/></svg>
+</a>
+<a href="#" class="text-gray-400 hover:text-white transition duration-300 ease-in-out">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm3.5 6h-2.5v2.5h2.5V8zm-3.5 0H8v2.5h2.5V8zm-2.5 3.5H8v2.5h2.5v-2.5zm3.5 0h-2.5v2.5h2.5v-2.5z"/></svg>
+</a>
+<a href="#" class="text-gray-400 hover:text-white transition duration-300 ease-in-out">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm3.5 6h-2.5v2.5h2.5V8zm-3.5 0H8v2.5h2.5V8zm-2.5 3.5H8v2.5h2.5v-2.5zm3.5 0h-2.5v2.5h2.5v-2.5z"/></svg>
+</a>
+</div>
+</div>
+</footer>
+
+<script>
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function (e) {
+e.preventDefault();
+
+document.querySelector(this.getAttribute('href')).scrollIntoView({
+behavior: 'smooth'
+});
+});
+});
+
+// Mobile menu toggle
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+
+mobileMenuButton.addEventListener('click', () => {
+mobileMenu.classList.remove('hidden');
+});
+
+closeMobileMenuButton.addEventListener('click', () => {
+mobileMenu.classList.add('hidden');
+});
+
+// Close mobile menu when a link is clicked
+mobileMenu.querySelectorAll('a').forEach(link => {
+link.addEventListener('click', () => {
+mobileMenu.classList.add('hidden');
+});
+});
+
+// Tab functionality for services section
+document.addEventListener('DOMContentLoaded', () => {
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabPanes = document.querySelectorAll('.tab-pane');
+
+tabButtons.forEach(button => {
+button.addEventListener('click', () => {
+// Deactivate all buttons and hide all panes
+tabButtons.forEach(btn => btn.classList.remove('active'));
+tabPanes.forEach(pane => pane.classList.add('hidden'));
+
+// Activate clicked button
+button.classList.add('active');
+
+// Show corresponding pane
+const targetTab = button.dataset.tab;
+document.getElementById(targetTab).classList.remove('hidden');
+});
+});
+});
+
+// Universal scroll-in animation
+document.addEventListener('DOMContentLoaded', () => {
+const sectionsToAnimate = document.querySelectorAll('.fade-in-section');
+
+const observerOptions = {
+root: null, // viewport as the root
+rootMargin: '0px',
+threshold: 0.1 // Trigger when 10% of the element is visible
+};
+
+const observer = new IntersectionObserver((entries, observer) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('is-visible');
+// Optional: Stop observing once it's visible if it's a one-time animation
+observer.unobserve(entry.target);
+}
+});
+}, observerOptions);
+
+sectionsToAnimate.forEach(section => {
+observer.observe(section);
+});
+
+// Special handling for the hero content to ensure it's visible on load
+// and then observed for the fade out/slide up effect
+const heroContent = document.getElementById('hero-content');
+if (heroContent) {
+heroContent.classList.add('is-visible'); // Make it visible initially
+
+// Add a separate scroll listener for the hero content's fade-out effect
+const heroSection = document.getElementById('home');
+window.addEventListener('scroll', () => {
+const scrollPosition = window.scrollY;
+const heroHeight = heroSection.offsetHeight;
+
+// Fade out and slide up the hero content as user scrolls
+// Adjust the divisor (e.g., heroHeight / 1.5) to control speed
+const opacity = 1 - (scrollPosition / (heroHeight * 0.5)); // Fades out faster
+const translateY = (scrollPosition / (heroHeight * 0.5)) * -50; // Slides up faster
+
+heroContent.style.opacity = Math.max(0, opacity);
+heroContent.style.transform = `translateY(${Math.min(0, translateY)}px)`;
+});
+}
+});
+</script>
+</body>
+</html>
